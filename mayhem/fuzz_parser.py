@@ -27,7 +27,7 @@ def TestOneInput(data):
     except (EmptyDataError, laspy.LaspyException, IndexError):
         return -1
     except ValueError as e:
-        if 'OFF' in str(e):
+        if 'OFF' in str(e) or 'ply' in str(e) or 'pickle' in str(e):
             return -1
         raise
 

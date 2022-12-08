@@ -4,13 +4,14 @@ import laspy
 import logging
 import sys
 import tempfile
-import pyntcloud.io as pio
 
-from pandas.errors import EmptyDataError
+with atheris.instrument_imports(include=['pyntcloud', 'pyntcloud.core_class']):
+    import pyntcloud.io as pio
+
+from pandas.errors import EmptyDataError, ParserError
 
 supported_exts = list(pio.FROM_FILE.keys())
 
-@atheris.instrument_func
 def TestOneInput(data):
     fdp = atheris.FuzzedDataProvider(data)
     
@@ -24,10 +25,10 @@ def TestOneInput(data):
             tempf.seek(0)
             tempf.flush()
             fuzz_func(tempf.name)
-    except (EmptyDataError, laspy.LaspyException, IndexError):
+    except (EmptyDataError, laspy.LaspyException, IndexError, ParserError):
         return -1
     except ValueError as e:
-        if 'OFF' in str(e):
+        if 'OFF' in str(e) or 'pickle' in str(e) or 'ply' in str(e):
             return -1
         raise
 

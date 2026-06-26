@@ -1,0 +1,6 @@
+project: pyntcloud
+target: parse-fuzz
+cmds:
+  - cmd: /mayhem/fuzz_parser
+    libfuzzer: true
+    timeout: 60
